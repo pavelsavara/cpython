@@ -813,17 +813,6 @@ ga_unpacked_tuple_args(PyObject *self, void *unused)
     Py_RETURN_NONE;
 }
 
-static PyObject *
-ga_unpacked_tuple_args(PyObject *self, void *unused)
-{
-    gaobject *alias = (gaobject *)self;
-    if (alias->starred && alias->origin == (PyObject *)&PyTuple_Type) {
-        Py_INCREF(alias->args);
-        return alias->args;
-    }
-    Py_RETURN_NONE;
-}
-
 static PyGetSetDef ga_properties[] = {
     {"__parameters__", ga_parameters, (setter)NULL, PyDoc_STR("Type variables in the GenericAlias."), NULL},
     {"__typing_unpacked_tuple_args__", ga_unpacked_tuple_args, (setter)NULL, NULL},

@@ -4178,10 +4178,6 @@ listiter_reduce_general(void *_it, int forward)
      * call must be before access of iterator pointers.
      * see issue #101765 */
 
-    /* _PyEval_GetBuiltin can invoke arbitrary code,
-     * call must be before access of iterator pointers.
-     * see issue #101765 */
-
     /* the objects are not the same, index is of different types! */
     if (forward) {
         iter = _PyEval_GetBuiltin(&_Py_ID(iter));
@@ -4189,14 +4185,12 @@ listiter_reduce_general(void *_it, int forward)
         if (it->it_index >= 0) {
             return Py_BuildValue("N(O)n", iter, it->it_seq, it->it_index);
         }
-        Py_DECREF(iter);
     } else {
         iter = _PyEval_GetBuiltin(&_Py_ID(reversed));
         listreviterobject *it = (listreviterobject *)_it;
         if (it->it_index >= 0) {
             return Py_BuildValue("N(O)n", iter, it->it_seq, it->it_index);
         }
-        Py_DECREF(reversed);
     }
     /* empty iterator, create an empty list */
     list = PyList_New(0);

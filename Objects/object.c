@@ -2269,7 +2269,6 @@ extern PyTypeObject _PyLineIterator;
 extern PyTypeObject _PyMemoryIter_Type;
 extern PyTypeObject _PyPositionsIterator;
 extern PyTypeObject _Py_GenericAliasIterType;
-extern PyTypeObject _PyMemoryIter_Type;
 
 static PyTypeObject* static_types[] = {
     // The two most important base types: must be initialized first and

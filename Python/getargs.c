@@ -1463,50 +1463,6 @@ error_unexpected_keyword_arg(PyObject *kwargs, PyObject *kwnames, PyObject *kwtu
                  (fname == NULL) ? "" : "()");
 }
 
-static void
-error_unexpected_keyword_arg(PyObject *kwargs, PyObject *kwnames, PyObject *kwtuple, const char *fname)
-{
-    /* make sure there are no extraneous keyword arguments */
-    Py_ssize_t j = 0;
-    while (1) {
-        PyObject *keyword;
-        if (kwargs != NULL) {
-            if (!PyDict_Next(kwargs, &j, &keyword, NULL))
-                break;
-        }
-        else {
-            if (j >= PyTuple_GET_SIZE(kwnames))
-                break;
-            keyword = PyTuple_GET_ITEM(kwnames, j);
-            j++;
-        }
-        if (!PyUnicode_Check(keyword)) {
-            PyErr_SetString(PyExc_TypeError,
-                            "keywords must be strings");
-            return;
-        }
-
-        int match = PySequence_Contains(kwtuple, keyword);
-        if (match <= 0) {
-            if (!match) {
-                PyErr_Format(PyExc_TypeError,
-                             "'%S' is an invalid keyword "
-                             "argument for %.200s%s",
-                             keyword,
-                             (fname == NULL) ? "this function" : fname,
-                             (fname == NULL) ? "" : "()");
-            }
-            return;
-        }
-    }
-    /* Something wrong happened. There are extraneous keyword arguments,
-     * but we don't know what. And we don't bother. */
-    PyErr_Format(PyExc_TypeError,
-                 "invalid keyword argument for %.200s%s",
-                 (fname == NULL) ? "this function" : fname,
-                 (fname == NULL) ? "" : "()");
-}
-
 int
 PyArg_ValidateKeywordArguments(PyObject *kwargs)
 {

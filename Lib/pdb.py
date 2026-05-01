@@ -2274,16 +2274,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         if doc is not None:
             self.message(self._help_message_from_doc(doc, usage_only=True))
 
-    def _getsourcelines(self, obj):
-        # GH-103319
-        # inspect.getsourcelines() returns lineno = 0 for
-        # module-level frame which breaks our code print line number
-        # This method should be replaced by inspect.getsourcelines(obj)
-        # once this bug is fixed in inspect
-        lines, lineno = inspect.getsourcelines(obj)
-        lineno = max(1, lineno)
-        return lines, lineno
-
 # Collect all command help into docstring, if not run with -OO
 
 if __doc__ is not None:

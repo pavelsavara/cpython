@@ -855,10 +855,6 @@ _PyConfig_InitCompatConfig(PyConfig *config)
 #endif
 }
 
-/* Excluded from public struct PyConfig for backporting reasons. */
-/* default to unconfigured, _PyLong_InitTypes() does the rest */
-int _Py_global_config_int_max_str_digits = -1;
-
 
 static void
 config_init_defaults(PyConfig *config)
@@ -1905,12 +1901,6 @@ config_read_complex_options(PyConfig *config)
     PyStatus status;
     if (config->tracemalloc < 0) {
         status = config_init_tracemalloc(config);
-        if (_PyStatus_EXCEPTION(status)) {
-            return status;
-        }
-    }
-    if (_Py_global_config_int_max_str_digits < 0) {
-        status = config_init_int_max_str_digits(config);
         if (_PyStatus_EXCEPTION(status)) {
             return status;
         }

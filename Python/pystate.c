@@ -708,7 +708,6 @@ _PyInterpreterState_New(PyThreadState *tstate, PyInterpreterState **pinterp)
         interp = &runtime->_main_interpreter;
         assert(interp->id == 0);
         assert(interp->next == NULL);
-        assert(interp->_static);
 
         interpreters->main = interp;
     }

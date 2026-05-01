@@ -7516,7 +7516,6 @@ compiler_match_inner(struct compiler *c, stmt_ty s, pattern_context *pc)
             RETURN_IF_ERROR(compiler_jump_if(c, LOC(m->pattern), m->guard, end, 0));
         }
         VISIT_SEQ(c, stmt, m->body);
-        UNSET_LOC(c);
     }
     USE_LABEL(c, end);
     return SUCCESS;

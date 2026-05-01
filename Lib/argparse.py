@@ -399,8 +399,7 @@ class HelpFormatter(object):
             except ValueError:
                 continue
             else:
-                group_action_count = len(group._group_actions)
-                end = start + group_action_count
+                end = start + len(group._group_actions)
                 if actions[start:end] == group._group_actions:
                     group_actions.update(group._group_actions)
                     inserts[start, end] = group

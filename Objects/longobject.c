@@ -2109,23 +2109,6 @@ long_to_decimal_string_internal(PyObject *aa,
     }
 #endif
 
-    /* quick and dirty pre-check for overflowing the decimal digit limit,
-       based on the inequality 10/3 >= log2(10)
-
-       explanation in https://github.com/python/cpython/pull/96537
-    */
-    if (size_a >= 10 * _PY_LONG_MAX_STR_DIGITS_THRESHOLD
-                  / (3 * PyLong_SHIFT) + 2) {
-        PyInterpreterState *interp = _PyInterpreterState_GET();
-        int max_str_digits = interp->int_max_str_digits;
-        if ((max_str_digits > 0) &&
-            (max_str_digits / (3 * PyLong_SHIFT) <= (size_a - 11) / 10)) {
-            PyErr_Format(PyExc_ValueError, _MAX_STR_DIGITS_ERROR_FMT_TO_STR,
-                         max_str_digits);
-            return -1;
-        }
-    }
-
     /* quick and dirty upper bound for the number of digits
        required to express a in base _PyLong_DECIMAL_BASE:
 
@@ -6708,10 +6691,6 @@ _PyLong_InitTypes(PyInterpreterState *interp)
                                       &int_info_desc) < 0)
     {
         return _PyStatus_ERR("can't init int info type");
-    }
-    interp->int_max_str_digits = _Py_global_config_int_max_str_digits;
-    if (interp->int_max_str_digits == -1) {
-        interp->int_max_str_digits = _PY_LONG_DEFAULT_MAX_STR_DIGITS;
     }
 
     return _PyStatus_OK();

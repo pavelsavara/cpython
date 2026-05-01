@@ -131,7 +131,7 @@ import _sre
 # public symbols
 __all__ = [
     "match", "fullmatch", "search", "sub", "subn", "split",
-    "findall", "finditer", "compile", "purge", "template", "escape",
+    "findall", "finditer", "compile", "purge", "escape",
     "error", "Pattern", "Match", "A", "I", "L", "M", "S", "X", "U",
     "ASCII", "IGNORECASE", "LOCALE", "MULTILINE", "DOTALL", "VERBOSE",
     "UNICODE", "NOFLAG", "RegexFlag", "PatternError"
@@ -294,18 +294,6 @@ def purge():
     _cache2.clear()
     _compile_template.cache_clear()
 
-
-def template(pattern, flags=0):
-    "Compile a template pattern, returning a Pattern object, deprecated"
-    import warnings
-    warnings.warn("The re.template() function is deprecated "
-                  "as it is an undocumented function "
-                  "without an obvious purpose. "
-                  "Use re.compile() instead.",
-                  DeprecationWarning)
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", DeprecationWarning)  # warn just once
-        return _compile(pattern, flags|T)
 
 # SPECIAL_CHARS
 # closing ')', '}' and ']'

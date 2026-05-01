@@ -34,6 +34,5 @@ PyTuple_SET_ITEM(PyObject *op, Py_ssize_t index, PyObject *value) {
     assert(index < Py_SIZE(tuple));
     tuple->ob_item[index] = value;
 }
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
 #define PyTuple_SET_ITEM(op, index, value) \
     PyTuple_SET_ITEM(_PyObject_CAST(op), (index), _PyObject_CAST(value))

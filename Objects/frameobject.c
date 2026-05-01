@@ -1353,34 +1353,6 @@ mark_stacks(PyCodeObject *code_obj, int len)
                 }
             }
         }
-        /* Scan exception table */
-        unsigned char *start = (unsigned char *)PyBytes_AS_STRING(code_obj->co_exceptiontable);
-        unsigned char *end = start + PyBytes_GET_SIZE(code_obj->co_exceptiontable);
-        unsigned char *scan = start;
-        while (scan < end) {
-            int start_offset, size, handler;
-            scan = parse_varint(scan, &start_offset);
-            assert(start_offset >= 0 && start_offset < len);
-            scan = parse_varint(scan, &size);
-            assert(size >= 0 && start_offset+size <= len);
-            scan = parse_varint(scan, &handler);
-            assert(handler >= 0 && handler < len);
-            int depth_and_lasti;
-            scan = parse_varint(scan, &depth_and_lasti);
-            int level = depth_and_lasti >> 1;
-            int lasti = depth_and_lasti & 1;
-            if (stacks[start_offset] != UNINITIALIZED) {
-                if (stacks[handler] == UNINITIALIZED) {
-                    todo = 1;
-                    uint64_t target_stack = pop_to_level(stacks[start_offset], level);
-                    if (lasti) {
-                        target_stack = push_value(target_stack, Lasti);
-                    }
-                    target_stack = push_value(target_stack, Except);
-                    stacks[handler] = target_stack;
-                }
-            }
-        }
     }
     Py_DECREF(co_code);
     return stacks;

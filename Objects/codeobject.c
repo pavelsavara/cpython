@@ -982,50 +982,6 @@ failed:
  ******************/
 
 int
-_PyCode_CreateLineArray(PyCodeObject *co)
-{
-    assert(co->_co_linearray == NULL);
-    PyCodeAddressRange bounds;
-    int size;
-    int max_line = 0;
-    _PyCode_InitAddressRange(co, &bounds);
-    while(_PyLineTable_NextAddressRange(&bounds)) {
-        if (bounds.ar_line > max_line) {
-            max_line = bounds.ar_line;
-        }
-    }
-    if (max_line < (1 << 15)) {
-        size = 2;
-    }
-    else {
-        size = 4;
-    }
-    co->_co_linearray = PyMem_Malloc(Py_SIZE(co)*size);
-    if (co->_co_linearray == NULL) {
-        PyErr_NoMemory();
-        return -1;
-    }
-    co->_co_linearray_entry_size = size;
-    _PyCode_InitAddressRange(co, &bounds);
-    while(_PyLineTable_NextAddressRange(&bounds)) {
-        int start = bounds.ar_start / sizeof(_Py_CODEUNIT);
-        int end = bounds.ar_end / sizeof(_Py_CODEUNIT);
-        for (int index = start; index < end; index++) {
-            assert(index < (int)Py_SIZE(co));
-            if (size == 2) {
-                assert(((int16_t)bounds.ar_line) == bounds.ar_line);
-                ((int16_t *)co->_co_linearray)[index] = bounds.ar_line;
-            }
-            else {
-                assert(size == 4);
-                ((int32_t *)co->_co_linearray)[index] = bounds.ar_line;
-            }
-        }
-    }
-    return 0;
-}
-
-int
 PyCode_Addr2Line(PyCodeObject *co, int addrq)
 {
     if (addrq < 0) {
@@ -1035,9 +991,6 @@ PyCode_Addr2Line(PyCodeObject *co, int addrq)
         return _Py_Instrumentation_GetLine(co, addrq/sizeof(_Py_CODEUNIT));
     }
     assert(addrq >= 0 && addrq < _PyCode_NBYTES(co));
-    if (co->_co_linearray) {
-        return _PyCode_LineNumberFromArray(co, addrq / sizeof(_Py_CODEUNIT));
-    }
     PyCodeAddressRange bounds;
     _PyCode_InitAddressRange(co, &bounds);
     return _PyCode_CheckLineNumber(addrq, &bounds);
@@ -1670,24 +1623,12 @@ PyCode_GetVarnames(PyCodeObject *code)
 }
 
 PyObject *
-PyCode_GetVarnames(PyCodeObject *code)
-{
-    return _PyCode_GetVarnames(code);
-}
-
-PyObject *
 _PyCode_GetCellvars(PyCodeObject *co)
 {
     if (init_co_cached(co)) {
         return NULL;
     }
     return get_cached_locals(co, &co->_co_cached->_co_cellvars, CO_FAST_CELL, co->co_ncellvars);
-}
-
-PyObject *
-PyCode_GetCellvars(PyCodeObject *code)
-{
-    return _PyCode_GetCellvars(code);
 }
 
 PyObject *

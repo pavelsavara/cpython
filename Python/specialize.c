@@ -435,9 +435,6 @@ _PyCode_Quicken(PyCodeObject *code)
         if (caches) {
             // The initial value depends on the opcode
             switch (opcode) {
-                case EXTENDED_ARG:
-                    _Py_SET_OPCODE(instructions[i], EXTENDED_ARG_QUICK);
-                    break;
                 case JUMP_BACKWARD:
                     instructions[i + 1].counter = initial_jump_backoff_counter();
                     break;

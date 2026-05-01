@@ -209,10 +209,6 @@ class sqlite3_int64_converter(CConverter):
 [python start generated code]*/
 /*[python end generated code: output=da39a3ee5e6b4b0d input=dff8760fb1eba6a1]*/
 
-[python start generated code]*/
-/*[python end generated code: output=da39a3ee5e6b4b0d input=e9bee126e0500e61]*/
-
-// NB: This needs to be in sync with the sqlite3.connect docstring
 /*[clinic input]
 _sqlite3.Connection.__init__ as pysqlite_connection_init
 

@@ -683,7 +683,7 @@ class EnumType(type):
                         'member order does not match _order_:\n  %r\n  %r'
                         % (enum_class._member_names_, _order_)
                         )
-
+        #
         return enum_class
 
     def __bool__(cls):
@@ -1412,23 +1412,6 @@ class Flag(Enum, boundary=STRICT):
     """
     Support for flags
     """
-
-    def __reduce_ex__(self, proto):
-        cls = self.__class__
-        unknown = self._value_ & ~cls._flag_mask_
-        member_value = self._value_ & cls._flag_mask_
-        if unknown and member_value:
-            return _or_, (cls(member_value), unknown)
-        for val in _iter_bits_lsb(member_value):
-            rest = member_value & ~val
-            if rest:
-                return _or_, (cls(rest), cls._value2member_map_.get(val))
-            else:
-                break
-        if self._name_ is None:
-            return cls, (self._value_,)
-        else:
-            return getattr, (cls, self._name_)
 
     _numeric_repr_ = repr
 

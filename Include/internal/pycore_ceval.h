@@ -37,11 +37,7 @@ extern unsigned long _PyEval_GetSwitchInterval(void);
 PyAPI_FUNC(int) _PyEval_MakePendingCalls(PyThreadState *);
 
 #ifndef Py_DEFAULT_RECURSION_LIMIT
-#  ifdef __wasi__
-#    define Py_DEFAULT_RECURSION_LIMIT 600
-#  else
-#    define Py_DEFAULT_RECURSION_LIMIT 1000
-#  endif
+#  define Py_DEFAULT_RECURSION_LIMIT 1000
 #endif
 
 extern void _Py_FinishPendingCalls(PyThreadState *tstate);

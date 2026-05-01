@@ -1055,7 +1055,7 @@ _io__WindowsConsoleIO_write_impl(winconsoleio *self, PyTypeObject *cls,
 {
     BOOL res = TRUE;
     wchar_t *wbuf;
-    DWORD len, wlen, orig_len, n = 0;
+    DWORD len, wlen, n = 0;
     HANDLE handle;
 
     if (self->fd == -1)

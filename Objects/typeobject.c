@@ -3176,11 +3176,6 @@ best_base(PyObject *bases)
     return base;
 }
 
-#define ADDED_FIELD_AT_OFFSET(name, offset) \
-    (type->tp_ ## name  && (base->tp_ ##name == 0) && \
-    type->tp_ ## name + sizeof(PyObject *) == (offset) && \
-    type->tp_flags & Py_TPFLAGS_HEAPTYPE)
-
 static int
 shape_differs(PyTypeObject *t1, PyTypeObject *t2)
 {

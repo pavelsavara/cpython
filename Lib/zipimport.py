@@ -354,9 +354,8 @@ def _read_directory(archive):
         try:
             # Check if there's a comment.
             try:
-                fp.seek(-END_CENTRAL_DIR_SIZE, 2)
-                header_position = fp.tell()
-                buffer = fp.read(END_CENTRAL_DIR_SIZE)
+                fp.seek(0, 2)
+                file_size = fp.tell()
             except OSError:
                 raise ZipImportError(f"can't read Zip file: {archive!r}",
                                      path=archive)

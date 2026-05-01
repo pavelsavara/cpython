@@ -46,7 +46,6 @@ import time
 import struct
 import copy
 import re
-import warnings
 
 try:
     import pwd
@@ -70,7 +69,6 @@ __all__ = ["TarFile", "TarInfo", "is_tarfile", "TarError", "ReadError",
            "tar_filter", "FilterError", "AbsoluteLinkError",
            "OutsideDestinationError", "SpecialFileError", "AbsolutePathError",
            "LinkOutsideDestinationError"]
-
 
 
 #---------------------------------------------------------

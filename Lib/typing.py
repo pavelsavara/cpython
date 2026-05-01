@@ -531,24 +531,6 @@ class _NotIterable:
     __iter__ = None
 
 
-class _NotIterable:
-    """Mixin to prevent iteration, without being compatible with Iterable.
-
-    That is, we could do::
-
-        def __iter__(self): raise TypeError()
-
-    But this would make users of this mixin duck type-compatible with
-    collections.abc.Iterable - isinstance(foo, Iterable) would be True.
-
-    Luckily, we can instead prevent iteration by setting __iter__ to None, which
-    is treated specially.
-    """
-
-    __slots__ = ()
-    __iter__ = None
-
-
 # Internal indicator of special typing constructs.
 # See __doc__ instance attribute for specific docs.
 class _SpecialForm(_Final, _NotIterable, _root=True):
@@ -870,9 +852,7 @@ def TypeAlias(self, parameters):
     be recognized as a proper type alias definition by type
     checkers.
 
-    Use TypeAlias to indicate that an assignment should
-    be recognized as a proper type alias definition by type
-    checkers. For example::
+    For example::
 
         Predicate: TypeAlias = Callable[..., bool]
 
@@ -1310,19 +1290,6 @@ def _generic_init_subclass(cls, *args, **kwargs):
             tvars = gvars
     cls.__parameters__ = tuple(tvars)
 
-    def __typing_prepare_subst__(self, alias, args):
-        params = alias.__parameters__
-        i = params.index(self)
-        if i >= len(args):
-            raise TypeError(f"Too few arguments for {alias}")
-        # Special case where Z[[int, str, bool]] == Z[int, str, bool] in PEP 612.
-        if len(params) == 1 and not _is_param_expr(args[0]):
-            assert i == 0
-            args = (args,)
-        # Convert lists to tuples to help other libraries cache the results.
-        elif isinstance(args[i], list):
-            args = (*args[:i], tuple(args[i]), *args[i+1:])
-        return args
 
 def _is_dunder(attr):
     return attr.startswith('__') and attr.endswith('__')
@@ -2860,7 +2827,6 @@ Callable.__doc__ = \
     Callable[[int], str] signifies a function that takes a single
     parameter of type int and returns a str.
 
-    Callable[[int], str] signifies a function of (int) -> str.
     The subscription syntax must always be used with exactly two
     values: the argument list and the return type.
     The argument list must be a list of types, a ParamSpec,

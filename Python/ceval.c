@@ -2295,7 +2295,6 @@ PyThreadState_EnterTracing(PyThreadState *tstate)
 {
     assert(tstate->tracing >= 0);
     tstate->tracing++;
-    tstate->cframe->use_tracing = 0;
 }
 
 void
@@ -2303,7 +2302,6 @@ PyThreadState_LeaveTracing(PyThreadState *tstate)
 {
     assert(tstate->tracing > 0);
     tstate->tracing--;
-    _PyThreadState_UpdateTracingState(tstate);
 }
 
 

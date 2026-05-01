@@ -304,7 +304,6 @@ static inline void PyUnicode_WRITE(int kind, void *data,
         _Py_STATIC_CAST(Py_UCS4*, data)[index] = value;
     }
 }
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
 #define PyUnicode_WRITE(kind, data, index, value) \
     PyUnicode_WRITE(_Py_STATIC_CAST(int, kind), _Py_CAST(void*, data), \
                     (index), _Py_STATIC_CAST(Py_UCS4, value))
@@ -324,7 +323,6 @@ static inline Py_UCS4 PyUnicode_READ(int kind,
     assert(kind == PyUnicode_4BYTE_KIND);
     return _Py_STATIC_CAST(const Py_UCS4*, data)[index];
 }
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 < 0x030b0000
 #define PyUnicode_READ(kind, data, index) \
     PyUnicode_READ(_Py_STATIC_CAST(int, kind), \
                    _Py_STATIC_CAST(const void*, data), \
